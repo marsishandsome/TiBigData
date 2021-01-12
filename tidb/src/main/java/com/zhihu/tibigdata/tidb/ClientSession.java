@@ -55,6 +55,7 @@ import org.tikv.common.meta.TiIndexColumn;
 import org.tikv.common.meta.TiIndexInfo;
 import org.tikv.common.meta.TiPartitionDef;
 import org.tikv.common.meta.TiTableInfo;
+import org.tikv.common.meta.TiTimestamp;
 import org.tikv.common.operation.iterator.CoprocessorIterator;
 import org.tikv.common.row.Row;
 import org.tikv.common.util.KeyRangeUtils;
@@ -74,8 +75,17 @@ public final class ClientSession implements AutoCloseable {
 
   private final HikariDataSource dataSource;
 
+  private final TiTimestamp snapshotTimestamp;
+
   private ClientSession(ClientConfig config) {
     this.config = requireNonNull(config, "config is null");
+
+    if(config.getTimeStamp() != null && !"".equals(config.getTimeStamp())) {
+      this.snapshotTimestamp = new TiTimestamp(Long.parseLong(config.getTimeStamp()));
+    } else {
+      this.snapshotTimestamp = null;
+    }
+
     dataSource = new HikariDataSource(new HikariConfig() {
       {
         setJdbcUrl(requireNonNull(config.getDatabaseUrl(), "database url can not be null"));
@@ -90,7 +100,12 @@ public final class ClientSession implements AutoCloseable {
     TiConfiguration tiConfiguration = TiConfiguration.createDefault(config.getPdAddresses());
     tiConfiguration.setReplicaRead(config.isReplicaRead());
     session = TiSession.create(tiConfiguration);
+    session.setTimestamp(this.snapshotTimestamp);
     catalog = session.getCatalog();
+  }
+
+  public TiTimestamp getTimestampFromPD() {
+    return session.getTimestampFromPD();
   }
 
   public List<String> getSchemaNames() {
@@ -351,7 +366,6 @@ public final class ClientSession implements AutoCloseable {
     clientConfig.setMinimumIdleSize(1);
     return new ClientSession(clientConfig);
   }
-
   public static ClientSession create(ClientConfig config) {
     return new ClientSession(new ClientConfig(config));
   }

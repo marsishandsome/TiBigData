@@ -51,6 +51,9 @@ public final class ClientConfig {
   public static final String TIDB_FILTER_PUSH_DOWN = "tidb.filter-push-down";
   public static final boolean TIDB_FILTER_PUSH_DOWN_DEFAULT = false;
 
+  public static final String TIDB_TIMESTAMP = "tidb.timestamp";
+  public static final String TIDB_TIMESTAMP_DEFAULT = "";
+
   private String pdAddresses;
 
   private String databaseUrl;
@@ -68,6 +71,8 @@ public final class ClientConfig {
   private boolean isReplicaRead;
 
   private boolean isFilterPushDown;
+
+  private String timestamp;
 
   public boolean isFilterPushDown() {
     return isFilterPushDown;
@@ -87,16 +92,16 @@ public final class ClientConfig {
 
   public ClientConfig() {
     this(null, null, null, MAX_POOL_SIZE_DEFAULT, MIN_IDLE_SIZE_DEFAULT, TIDB_WRITE_MODE_DEFAULT,
-        TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT);
+        TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT, TIDB_TIMESTAMP_DEFAULT);
   }
 
   public ClientConfig(String databaseUrl, String username, String password) {
     this(databaseUrl, username, password, MAX_POOL_SIZE_DEFAULT, MIN_IDLE_SIZE_DEFAULT,
-        TIDB_WRITE_MODE_DEFAULT, TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT);
+        TIDB_WRITE_MODE_DEFAULT, TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT, TIDB_TIMESTAMP_DEFAULT);
   }
 
   public ClientConfig(String databaseUrl, String username, String password, int maximumPoolSize,
-      int minimumIdleSize, String writeMode, boolean isReplicaRead, boolean isFilterPushDown) {
+      int minimumIdleSize, String writeMode, boolean isReplicaRead, boolean isFilterPushDown, String timestamp) {
     this.databaseUrl = databaseUrl;
     this.username = username;
     this.password = password;
@@ -105,6 +110,7 @@ public final class ClientConfig {
     this.writeMode = writeMode;
     this.isReplicaRead = isReplicaRead;
     this.isFilterPushDown = isFilterPushDown;
+    this.timestamp = timestamp;
   }
 
   public ClientConfig(Map<String, String> properties) {
@@ -119,7 +125,8 @@ public final class ClientConfig {
         Boolean.parseBoolean(properties
             .getOrDefault(TIDB_REPLICA_READ, Boolean.toString(TIDB_REPLICA_READ_DEFAULT))),
         Boolean.parseBoolean(properties
-            .getOrDefault(TIDB_FILTER_PUSH_DOWN, Boolean.toString(TIDB_FILTER_PUSH_DOWN_DEFAULT)))
+            .getOrDefault(TIDB_FILTER_PUSH_DOWN, Boolean.toString(TIDB_FILTER_PUSH_DOWN_DEFAULT))),
+        properties.getOrDefault(TIDB_TIMESTAMP, "")
     );
   }
 
@@ -131,7 +138,12 @@ public final class ClientConfig {
         config.getMinimumIdleSize(),
         config.getWriteMode(),
         config.isReplicaRead(),
-        config.isFilterPushDown());
+        config.isFilterPushDown(),
+        config.getTimeStamp());
+  }
+
+  public String getTimeStamp() {
+    return this.timestamp;
   }
 
   public String getPdAddresses() {

@@ -56,6 +56,7 @@ import org.apache.flink.table.factories.Factory;
 import org.apache.flink.util.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.tikv.common.meta.TiTimestamp;
 
 public class TiDBCatalog extends AbstractCatalog {
 
