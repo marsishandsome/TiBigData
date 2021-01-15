@@ -97,11 +97,13 @@ public final class ClientConfig {
 
   public ClientConfig(String databaseUrl, String username, String password) {
     this(databaseUrl, username, password, MAX_POOL_SIZE_DEFAULT, MIN_IDLE_SIZE_DEFAULT,
-        TIDB_WRITE_MODE_DEFAULT, TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT, TIDB_TIMESTAMP_DEFAULT);
+        TIDB_WRITE_MODE_DEFAULT, TIDB_REPLICA_READ_DEFAULT, TIDB_FILTER_PUSH_DOWN_DEFAULT,
+        TIDB_TIMESTAMP_DEFAULT);
   }
 
   public ClientConfig(String databaseUrl, String username, String password, int maximumPoolSize,
-      int minimumIdleSize, String writeMode, boolean isReplicaRead, boolean isFilterPushDown, String timestamp) {
+      int minimumIdleSize, String writeMode, boolean isReplicaRead, boolean isFilterPushDown,
+                      String timestamp) {
     this.databaseUrl = databaseUrl;
     this.username = username;
     this.password = password;

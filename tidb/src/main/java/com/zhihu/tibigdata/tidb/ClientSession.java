@@ -80,7 +80,7 @@ public final class ClientSession implements AutoCloseable {
   private ClientSession(ClientConfig config) {
     this.config = requireNonNull(config, "config is null");
 
-    if(config.getTimeStamp() != null && !"".equals(config.getTimeStamp())) {
+    if (config.getTimeStamp() != null && !"".equals(config.getTimeStamp())) {
       this.snapshotTimestamp = new TiTimestamp(Long.parseLong(config.getTimeStamp()));
     } else {
       this.snapshotTimestamp = null;
@@ -366,6 +366,7 @@ public final class ClientSession implements AutoCloseable {
     clientConfig.setMinimumIdleSize(1);
     return new ClientSession(clientConfig);
   }
+
   public static ClientSession create(ClientConfig config) {
     return new ClientSession(new ClientConfig(config));
   }

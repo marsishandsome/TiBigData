@@ -24,7 +24,6 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.table.api.TableResult;
 import org.tikv.common.meta.TiTimestamp;
-
 import java.util.HashMap;
 import java.util.Map;
 
